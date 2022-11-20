@@ -1,0 +1,176 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <!-- With template-driven approach, Angular is capable of detecting forms in HTML and parsing it into a javascript object, but need to tell angular -->
+      <!-- Template driven approach means we control everything in the HTML code, using angular directives and properties, data-binding etc... -->
+      <!-- Note : providing f in onSobmit() is optional as #f acts a local reference already -->
+      <form (ngSubmit)="onSubmit()" #f="ngForm">
+        <div id="user-data" ngModelGroup="userData" #userData="ngModelGroup">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <!-- This ngModel is enough to tell Angular : this is a control you need to parse and make it part of FormsModule (imports)-->
+            <input
+              type="text"
+              id="username"
+              class="form-control"
+              ngModel
+              name="username"
+              required
+              #username="ngModel"
+            />
+          </div>
+          <span class="help-block" *ngIf="!username.valid && username.touched"
+            >Please enter a valid value!</span
+          >
+          <button
+            class="btn btn-default"
+            type="button"
+            (click)="suggestUserName()"
+          >
+            Suggest an Username
+          </button>
+          <div class="form-group">
+            <label for="email">Mail</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              ngModel
+              name="email"
+              required
+              email
+            />
+          </div>
+        </div>
+        <p *ngIf="!userData.valid && userData.touched">User Data is invalid!</p>
+        <div class="form-group">
+          <label for="secret">Secret Questions</label>
+          <select
+            id="secret"
+            class="form-control"
+            [ngModel]="defaultQuestion"
+            name="secret"
+          >
+            <option value="pet">Your first Pet?</option>
+            <option value="teacher">Your first teacher?</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <textarea
+            name="questionAnswer"
+            rows="3"
+            class="form-control"
+            [(ngModel)]="answer"
+          ></textarea>
+        </div>
+        <p>Your reply: {{ answer }}</p>
+        <div class="radio" *ngFor="let gender of genders">
+          <label
+            ><input type="radio" name="gender" ngModel [value]="gender" />{{
+              gender
+            }}</label
+          >
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!f.valid">
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+  <hr />
+  <div class="row" *ngIf="submitted">
+    <div class="col-xs-12">
+      <h3>Your Data</h3>
+      <p>Username: {{ user.username }}</p>
+      <p>Mail: {{ user.email }}</p>
+      <p>Secret Question: Your first {{ user.secretQuestion }}</p>
+      <p>Answer: {{ user.answer }}</p>
+      <p>Gender: {{ user.gender }}</p>
+    </div>
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <!-- assignment  -->
+      <form (ngSubmit)="onSubmitAssignment()" #assignmentForm="ngForm">
+        <div
+          id="assignment-data"
+          ngModelGroup="assignmentData"
+          #assignmentData="ngModelGroup"
+        >
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <!-- This ngModel is enough to tell Angular : this is a control you need to parse and make it part of FormsModule (imports)-->
+            <input
+              type="text"
+              id="emailAddress"
+              class="form-control"
+              ngModel
+              name="emailAddress"
+              required
+              email
+              #emailAddress="ngModel"
+              class="form-control"
+            />
+            <!-- this is thanks to local referencing above with               #emailAddress="ngModel"-->
+            <span
+              class="help-block"
+              *ngIf="!emailAddress.valid && emailAddress.touched"
+              >Please enter valid email!</span
+            >
+          </div>
+          <!-- <p *ngIf="!assignmentData.valid && assignmentData.touched">
+            email is invalid!
+          </p> -->
+          <div class="form-group">
+            <label for="subscription">Subscription Plan</label>
+            <select
+              id="subscription"
+              class="form-control"
+              [ngModel]="defaultSubscription"
+              name="subscription"
+            >
+              <!-- <option value="Basic">Basic</option>
+              <option value="Advanced">Advanced</option>
+              <option value="Pro">Pro</option> -->
+              <option *ngFor="let sub of subscriptionArr" [value]="sub">
+                {{ sub }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              ngModel
+              required
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!assignmentForm.valid"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+  <!-- this is thanks to local referencing above with #assignmentForm="ngForm" -->
+  <p *ngIf="!assignmentForm.valid && assignmentForm.touched">
+    Form is invalid!
+  </p>
+  <div class="row" *ngIf="assignmentSubmitted">
+    <div class="col-xs-12">
+      <h3>Your Data</h3>
+      <p>Mail: {{ assignmentUser.email }}</p>
+      <p>Subscription Plan: {{ assignmentUser.subscriptionPlan }}</p>
+      <p>Password: {{ assignmentUser.password }}</p>
+    </div>
+  </div>
+</div>
